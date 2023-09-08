@@ -1,183 +1,66 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "name": "NGROK-SSH.ipynb",
-      "provenance": [],
-      "include_colab_link": true
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    },
-    "accelerator": "GPU"
-  },
-  "cells": [
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "view-in-github",
-        "colab_type": "text"
-      },
-      "source": [
-        "<a href=\"https://colab.research.google.com/github/muumujaja/FreeRDP-Windows-Build/blob/master/W2019\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "#@title **GPU CHECK**\n",
-        "!nvidia-smi"
-      ],
-      "metadata": {
-        "cellView": "form",
-        "id": "q6m7BaFRJiEm",
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "outputId": "1121adc1-1388-4bc5-fc73-f3c7530acd01"
-      },
-      "execution_count": 1,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "Fri Sep  8 21:25:36 2023       \n",
-            "+-----------------------------------------------------------------------------+\n",
-            "| NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0     |\n",
-            "|-------------------------------+----------------------+----------------------+\n",
-            "| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |\n",
-            "| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |\n",
-            "|                               |                      |               MIG M. |\n",
-            "|===============================+======================+======================|\n",
-            "|   0  Tesla T4            Off  | 00000000:00:04.0 Off |                    0 |\n",
-            "| N/A   50C    P8    10W /  70W |      0MiB / 15360MiB |      0%      Default |\n",
-            "|                               |                      |                  N/A |\n",
-            "+-------------------------------+----------------------+----------------------+\n",
-            "                                                                               \n",
-            "+-----------------------------------------------------------------------------+\n",
-            "| Processes:                                                                  |\n",
-            "|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |\n",
-            "|        ID   ID                                                   Usage      |\n",
-            "|=============================================================================|\n",
-            "|  No running processes found                                                 |\n",
-            "+-----------------------------------------------------------------------------+\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "#@title **SSH TMATE**\n",
-        "!pkill -9 tmate\n",
-        "!wget -nc https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null\n",
-        "!tar --skip-old-files -xvf tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null\n",
-        "!rm -f nohup.out; bash -ic 'nohup ./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock new-session -d & disown -a' >/dev/null 2>&1\n",
-        "!./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock wait tmate-ready\n",
-        "!./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p \"#{tmate_ssh}\""
-      ],
-      "metadata": {
-        "id": "24MNMM1sS5SD",
-        "cellView": "form",
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "outputId": "14a3e2fc-5caf-4f6c-8b2d-25de68d6a41b"
-      },
-      "execution_count": null,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "ssh ydn3cXEAR69kcjwbWNMdczcBG@sfo2.tmate.io\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "#@title **SSH NGROK** [Auth Token Ngrok](https://dashboard.ngrok.com/get-started/your-authtoken)\n",
-        "\n",
-        "!wget https://raw.githubusercontent.com/a2nk/get-xmr/main/ssh-ngrokok.sh && chmod +x ssh-ngrokok.sh && ./ssh-ngrokok.sh"
-      ],
-      "metadata": {
-        "id": "dq-XSctdh8L6",
-        "cellView": "form",
-        "outputId": "06013f64-2606-4d00-dc59-92175b7fc8a8",
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        }
-      },
-      "execution_count": null,
-      "outputs": [
-        {
-          "metadata": {
-            "tags": null
-          },
-          "name": "stdout",
-          "output_type": "stream",
-          "text": [
-            "--2023-09-08 21:25:47--  https://raw.githubusercontent.com/a2nk/get-xmr/main/ssh-ngrokok.sh\n",
-            "Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 185.199.108.133, 185.199.109.133, 185.199.110.133, ...\n",
-            "Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|185.199.108.133|:443... connected.\n",
-            "HTTP request sent, awaiting response... 200 OK\n",
-            "Length: 1183 (1.2K) [text/plain]\n",
-            "Saving to: ‘ssh-ngrokok.sh’\n",
-            "\n",
-            "\rssh-ngrokok.sh        0%[                    ]       0  --.-KB/s               \rssh-ngrokok.sh      100%[===================>]   1.16K  --.-KB/s    in 0s      \n",
-            "\n",
-            "2023-09-08 21:25:47 (45.9 MB/s) - ‘ssh-ngrokok.sh’ saved [1183/1183]\n",
-            "\n",
-            "=======================\n",
-            "Download ngrok\n",
-            "=======================\n",
-            "Paste Ngrok Authtoken: "
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "#@title **Sleep Mode**\n",
-        "!sleep  9 && sleep 99 && sleep 999 &&  sleep 9999 &&  sleep 99999 &&  sleep 999999 && sleep 9999999 && sleep 99999999 && sleep 999999999 &"
-      ],
-      "metadata": {
-        "cellView": "form",
-        "id": "Uwg7bopuPJ8k"
-      },
-      "execution_count": null,
-      "outputs": []
-    },
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "e9wa7ujNT_pz"
-      },
-      "source": [
-        "**Auto Reconnect**\n",
-        "\n",
-        "Press F12 >>> Select Console>>> Paste this code\n",
-        "```\n",
-        "function ClickConnect() {\n",
-        "  console.log('Working')\n",
-        "  document\n",
-        "    .querySelector('#top-toolbar > colab-connect-button')\n",
-        "    .shadowRoot.querySelector('#connect')\n",
-        "    .click()\n",
-        "}\n",
-        "\n",
-        "setInterval(ClickConnect, 60000)\n",
-        "\n"
-      ]
-    }
-  ]
-}
+#! /bin/bash
+# Make Instance Ready for Remote Desktop or RDP
+apt-get update
+rm -rf w2019 w2019.img w2019.gz ngrok ngrok.zip ng.sh > /dev/null 2>&1
+echo "Download windows files"
+wget -O w2019.gz https://go.aank.me/win/W2019-aank.gz
+gunzip w2019.gz
+echo "Wait..."
+echo "I m Working Now.."
+mv w2019 w2019.img
+wget -O ng.sh https://bit.ly/GCngr0k > /dev/null 2>&1
+chmod +x ng.sh
+./ng.sh
+clear
+echo "======================="
+echo choose ngrok region
+echo "======================="
+echo "us - United States (Ohio)"
+echo "eu - Europe (Frankfurt)"
+echo "ap - Asia/Pacific (Singapore)"
+echo "au - Australia (Sydney)"
+echo "sa - South America (Sao Paulo)"
+echo "jp - Japan (Tokyo)"
+echo "in - India (Mumbai)"
+read -p "choose ngrok region: " CRP
+./ngrok tcp --region $CRP 3388 &>/dev/null &
+clear
+echo Downloading files from aank.me
+apt-get install qemu-system-x86 -y
+echo "Wait..."
+echo "Starting Windows"
+qemu-system-x86_64 -hda w2019.img -m 8G -smp cores=4 -net user,hostfwd=tcp::3388-:3389 -net nic -object rng-random,id=rng0,filename=/dev/urandom -device virtio-rng-pci,rng=rng0 -vga vmware -nographic &>/dev/null &
+clear
+echo RDP Address:
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+echo "===================================="
+echo "Username: Administrator"
+echo "Password: Lingg@H0sting"
+echo "===================================="
+echo "===================================="
+echo "Don't closse this Tab"
+echo "Wait 1 - 3 minut for finishing bot"
+echo "RDP run up to 50 hours"
+echo "Support YT Channel-> Aank is ME, thankyou"
+echo "Link-> https://aank.me/Youtube"
+echo "===================================="
+b='\033[1m'
+r='\E[31m'
+g='\E[32m'
+c='\E[36m'
+endc='\E[0m'
+enda='\033[0m'
+# Branding
+
+printf """$c$b
+ 
+██╗     ██╗███╗   ██╗ ██████╗  ██████╗  █████╗ ██╗  ██╗ ██████╗ ███████╗████████╗██╗███╗   ██╗ ██████╗ 
+██║     ██║████╗  ██║██╔════╝ ██╔════╝ ██╔══██╗██║  ██║██╔═══██╗██╔════╝╚══██╔══╝██║████╗  ██║██╔════╝ 
+██║     ██║██╔██╗ ██║██║  ███╗██║  ███╗███████║███████║██║   ██║███████╗   ██║   ██║██╔██╗ ██║██║  ███╗
+██║     ██║██║╚██╗██║██║   ██║██║   ██║██╔══██║██╔══██║██║   ██║╚════██║   ██║   ██║██║╚██╗██║██║   ██║
+███████╗██║██║ ╚████║╚██████╔╝╚██████╔╝██║  ██║██║  ██║╚██████╔╝███████║   ██║   ██║██║ ╚████║╚██████╔╝
+╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝   ╚═╝╚═╝  ╚═══╝ ╚═════╝
+    $r  Support YT Channel-> Aank is ME © 2022 $c https://aank.me/Youtube 
+          
+$endc$enda""";
+sleep 43200
